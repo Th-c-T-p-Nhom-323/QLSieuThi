@@ -110,17 +110,86 @@ namespace BanHangSieuTHi
 
         private void btnTaoHD_Click(object sender, EventArgs e)
         {
+            int dem = Convert.ToInt32(truyVanDL.LayDuLieu("Select count(*) from HOADONXUAT").Rows[0][0].ToString().Trim());           
+
+            if (dem >= 0)
+            {
+                txtMaHD.Text = "HD0" + (dem + 1);
+            }
+            else if (dem >= 10)
+            {
+                txtMaHD.Text = "HD" + (dem + 1);
+            }
+
+            txbTongTien.Text = "0";
+            if (txtMaHD.Text == "") { MessageBox.Show("Bạn chưa nhập mã HĐ"); }
+            int dem1 = Convert.ToInt32(truyVanDL.LayDuLieu("Select count(*) from HOADONXUAT where SoHDX = '" + txtMaHD.Text.Trim() + "'").Rows[0][0].ToString().Trim());
+            if (dem1>0)
+            {
+                MessageBox.Show("Đơn hàng này đã tồn tại!");
+            }
+            else
+            {               
+                if (txtMaHD.Text != "")
+                {
+
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+                    SqlCommand cmd = new SqlCommand("HOADONXUAT_ThemHoaDon", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("SoHDX", SqlDbType.NChar)).Value = txtMaHD.Text;
+                    cmd.Parameters.Add(new SqlParameter("NgayXuat", SqlDbType.Date)).Value = dTPNgayBan.Text;
+                    cmd.Parameters.Add(new SqlParameter("ThanhTienXuat", SqlDbType.BigInt)).Value = Convert.ToInt32(txbTongTien.Text);
+                    cmd.Parameters.Add(new SqlParameter("MaNV", SqlDbType.NChar)).Value = cmbNhanVien.Text;
+                    cmd.Parameters.Add(new SqlParameter("MaKH", SqlDbType.NChar)).Value = txtMaKH.Text;
+                    cmd.ExecuteNonQuery(); //thực thi
+
+                    if (con.State == ConnectionState.Open)
+                        con.Close();
+                    frmBanHang_Load(sender, e);
+                    MessageBox.Show("Thêm thành công!");
+
+                }
+            }
             
         }
 
         private void btnThemHH_Click(object sender, EventArgs e)
         {
+            int dem2 = Convert.ToInt32(truyVanDL.LayDuLieu("Select count(*) from chitietxuat where mahang = '" + txtMaHang.Text.Trim() + "' and SoHDX = '" + txtMaHD.Text.Trim() + "'").Rows[0][0].ToString().Trim());           
+            float tien = Convert.ToInt32(truyVanDL.LayDuLieu("select GiaDeNghi from HANGHOA where MaHang = '" + txtMaHang.Text.Trim() + "'").Rows[0][0].ToString().Trim()) * Convert.ToInt32(txtSoLuong.Text.Trim());
             
+            if (dem2 > 0)
+            {
+                MessageBox.Show("Hàng này đã có");
+            }
+            else
+            {
+
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+                SqlCommand cmd = new SqlCommand("CHITIETXUAT_ThemChiTietHoaDon", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("SoHDX", SqlDbType.NChar)).Value = txtMaHD.Text;
+                cmd.Parameters.Add(new SqlParameter("MaLoai", SqlDbType.NChar)).Value = txtMaLoai.Text;
+                cmd.Parameters.Add(new SqlParameter("MaHang", SqlDbType.NChar)).Value = txtMaHang.Text;
+                cmd.Parameters.Add(new SqlParameter("SoLuong", SqlDbType.Int)).Value = Convert.ToInt32(txtSoLuong.Text);
+                cmd.Parameters.Add(new SqlParameter("DonGia", SqlDbType.BigInt)).Value = tien;
+                cmd.ExecuteNonQuery(); //thực thi            
+
+                if (con.State == ConnectionState.Open)
+                    con.Close();
+                //load lại datagridview 
+                LoadDatagridView();
+                float tongtien = Convert.ToInt32(truyVanDL.LayDuLieu("select sum(DonGia) from CHITIETXUAT where SoHDX = '" + txtMaHD.Text.Trim() + "'").Rows[0][0].ToString().Trim());
+                txbTongTien.Text = tongtien.ToString().Trim();
+
+            }
         }
 
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
-           
+               
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
