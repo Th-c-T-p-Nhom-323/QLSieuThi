@@ -43,10 +43,15 @@ namespace BanHangSieuTHi
         {
             LoadListView();
         }
-        //Chưa làm
+       
         private void listView1_ItemActivate(object sender, EventArgs e)
         {
-            
+            int row = this.listView1.SelectedItems[0].Index;
+            txtMa.Text = this.listView1.Items[row].SubItems[1].Text;
+            txtTen.Text = this.listView1.Items[row].SubItems[2].Text;
+            temp = this.listView1.Items[row].SubItems[1].Text;
+            txtDiaChi.Text = this.listView1.Items[row].SubItems[3].Text;
+            txtSdt.Text = this.listView1.Items[row].SubItems[4].Text;
         }
 
 
