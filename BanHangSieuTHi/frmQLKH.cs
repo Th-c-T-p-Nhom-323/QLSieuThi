@@ -22,15 +22,26 @@ namespace BanHangSieuTHi
         }
 
         string temp;
-        //Chưa làm
+        
         public void LoadListView()
         {
-            
+            listView1.Items.Clear();
+            sqlQuery sql = new sqlQuery();
+            DataTable dt = sql.LayDuLieu("Select * from KHACHHANG");
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                ListViewItem item = new ListViewItem((i + 1).ToString());
+                item.SubItems.Add(dt.Rows[i][0].ToString());
+                item.SubItems.Add(dt.Rows[i][1].ToString());
+                item.SubItems.Add(dt.Rows[i][2].ToString());
+                item.SubItems.Add(dt.Rows[i][3].ToString());
+                listView1.Items.Add(item);
+            }
         }
-        //Chưa làm
+        
         private void frmQLKH_Load(object sender, EventArgs e)
         {
-            
+            LoadListView();
         }
         //Chưa làm
         private void listView1_ItemActivate(object sender, EventArgs e)
