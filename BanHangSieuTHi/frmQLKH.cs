@@ -74,10 +74,35 @@ namespace BanHangSieuTHi
         {
             
         }
-        //Chưa làm
+        
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            
+            try
+            {
+                if (txtMa.Text != "")
+                {
+                    DialogResult result;
+                    result = MessageBox.Show("BẠN CÓ MUỐN THÊM KHÁCH HÀNG NÀY KHÔNG?", "THÔNG BÁO", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        string[] name = { "@MaKH", "@TenKH", "@DiaChiKH", "@SdtKH" };
+                        string[] value = { txtMa.Text, txtTen.Text, txtDiaChi.Text, txtSdt.Text };
+                        sqlQuery sql = new sqlQuery();
+                        sql.update("ADD_KH", name, value, 4);
+                        MessageBox.Show("THÊM KHÁCH HÀNG THÀNH CÔNG !", "");
+
+                        LoadListView();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Mời kiểm tra lại !", "THÔNG BÁO");
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Bạn đã nhập đủ các trường cần thiết chưa??", "Warning");
+            }
 
         }
 
