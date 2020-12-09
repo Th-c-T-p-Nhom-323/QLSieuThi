@@ -111,20 +111,66 @@ namespace BanHangSieuTHi
             
             
         }
-        //Chưa làm
+       
         private void btnChange_Click(object sender, EventArgs e)
         {
-            
+            try
+            {
+                if (txtMa.Text != "")
+                {
+                    DialogResult result;
+                    result = MessageBox.Show("BẠN CÓ MUỐN SỬA THÔNG TIN KHÁCH HÀNG NÀY KHÔNG?", "THÔNG BÁO", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        string[] name = { "@MaKH", "@TenKH", "@DiaChiKH", "@SdtKH" };
+                        string[] value = { txtMa.Text, txtTen.Text, txtDiaChi.Text, txtSdt.Text };
+                        sqlQuery sql = new sqlQuery();
+                        sql.update("UPDATE_KH", name, value, 4);
+                        MessageBox.Show("Cập nhật thành công");
+                        listView1.Items.Clear();
+                        LoadListView();
+                    }
+                }
+                else { MessageBox.Show("Hãy chọn một khách hàng bạn muốn thao tác !!", "Thông tin"); }
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Đã có lỗi trong quá trình sửa!!", "Thông tin");
+            }
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
-        //Chưa làm
+        
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            
+            try
+            {
+                if (txtMa.Text != "")
+                {
+                    DialogResult result;
+                    result = MessageBox.Show("BẠN CÓ MUỐN XÓA KHÁCH HÀNG NÀY KHÔNG?", "THÔNG BÁO", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        string[] name = { "@MaKH" };
+                        string[] value = { temp };
+                        sqlQuery sql = new sqlQuery();
+                        sql.update("DELETE_KH", name, value, 1);
+                        MessageBox.Show("Xóa thành công .");
+                        listView1.Items.Clear();
+                        LoadListView();
+                    }
+                }
+                else { MessageBox.Show("Hãy chọn một khách hàng bạn muốn thao tác !!", "Warning"); }
+
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Thông tin khách hàng đã lưu!Không thể xóa", "Warning");
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
