@@ -189,12 +189,52 @@ namespace BanHangSieuTHi
 
         private void btnThanhToan_Click(object sender, EventArgs e)
         {
-               
+            float tienThua = Convert.ToInt32(txbTienKhachDua.Text) - Convert.ToInt32(txbTongTien.Text);
+            txbTienThua.Text = tienThua.ToString().Trim();            
+
+            try
+            {
+                if (con.State == ConnectionState.Closed)
+                    con.Open();
+                cmd = new SqlCommand("UPDATE HOADONXUAT SET THANHTIENXUAT = '"+txbTongTien.Text+"' WHERE SoHDX = '"+txtMaHD.Text+"' ",con);
+
+                cmd.ExecuteNonQuery();
+
+                if (con.State == ConnectionState.Open)
+                    con.Close();
+                MessageBox.Show("Thanh toán thành công!");
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("Lỗi Thanh toán");
+            }           
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            
+            if (MessageBox.Show("Bạn muốn hủy đơn hàng?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                try
+                {
+                    if (con.State == ConnectionState.Closed)
+                        con.Open();
+
+                    cmd = new SqlCommand("DELETE FROM CHITIETXUAT WHERE SoHDX = '" + txtMaHD.Text + "'" + "DELETE FROM HOADONXUAT WHERE SoHDX = '" + txtMaHD.Text + "'", con);                   
+                    cmd.ExecuteNonQuery();
+
+                    if (con.State == ConnectionState.Open)
+                        con.Close();
+                    frmBanHang_Load(sender, e);
+                    LoadDatagridView();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+               
+            }
         }
     }
 }
