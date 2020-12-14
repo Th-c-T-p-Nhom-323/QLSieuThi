@@ -47,7 +47,12 @@ namespace BanHangSieuTHi
 
         private void btnIn_Click(object sender, EventArgs e)
         {
-            
+            int check = comboBox1.SelectedIndex;
+            if (check == 0)
+            {
+                frmBaoCaoThongKe frm = new frmBaoCaoThongKe();
+                frm.Show();
+            }
         }
 
         private void frmThongKe_Load(object sender, EventArgs e)
