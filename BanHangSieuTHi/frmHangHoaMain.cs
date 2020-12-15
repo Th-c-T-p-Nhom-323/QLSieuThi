@@ -94,20 +94,76 @@ namespace BanHangSieuTHi
 
         private void btnChange_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-                
-            //}
-            //catch (Exception)
-            //{
+            if (txtTen.Text != "")
+            {
 
-            //}
+                DialogResult result;
+                result = MessageBox.Show("BẠN CÓ MUỐN SỬA THÔNG TIN HÀNG HÓA NÀY KHÔNG?", "THÔNG BÁO", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    sqlQuery truyVan = new sqlQuery();
+                    DataTable dt = truyVan.LayDuLieu("select * from LOAIHANG where DienGiai = N'" + txtLoai.Text + "'");
+                    Object MaLoai = "";
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        MaLoai = row["MaLoai"];
+                    }
+
+                    string[] name = { "@MaHang", "@TenHang", "@DonVi", "@TenNhaSX", "@GiaDeNghi", "@MaLoai", "@SoLuongSP" };
+                    string[] value = { MaHH, txtTen.Text, txtDonVi.Text, txtTenNSX.Text, txtGia.Text, MaLoai.ToString(), txtSoLuong.Text };
+
+                    truyVan.update("UPDATE_HH", name, value, 7);
+                    MessageBox.Show("Cập nhật thành công");
+                    listView1.Items.Clear();
+                    LoadListView1();
+                }
+            }
+            else { MessageBox.Show("Hãy chọn một hàng hóa bạn muốn thao tác !!", "Warning"); }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             //try
-            //
+            //{
+            if (txtTen.Text != "")
+            {
+                DialogResult result;
+                result = MessageBox.Show("BẠN CÓ MUỐN THÊM HÀNG HÓA NÀY KHÔNG?", "THÔNG BÁO", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    sqlQuery truyVan = new sqlQuery();
+
+                    DataTable dtHH = truyVan.LayDuLieu("select * from HANGHOA order by MaHang desc");
+                    string MaHang = "";
+                    foreach (DataRow row in dtHH.Rows)
+                    {
+                        MaHang = row["MaHang"].ToString();
+                        int k = MaHang.IndexOf("h");
+                        int t = int.Parse(MaHang.Substring(k + 1)) + 1;
+                        MaHang = "h" + t;
+                        break;
+                    }
+
+                    DataTable dt = truyVan.LayDuLieu("select * from LOAIHANG where DienGiai = N'" + txtLoai.Text + "'");
+                    Object MaLoai = "";
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        MaLoai = row["MaLoai"];
+                    }
+
+                    string[] name = { "@MaHang", "@TenHang", "@DonVi", "@TenNhaSX", "@GiaDeNghi", "@MaLoai", "@SoLuongSP" };
+                    string[] value = { MaHang, txtTen.Text, txtDonVi.Text, txtTenNSX.Text, txtGia.Text, MaLoai.ToString(), txtSoLuong.Text };
+                    sqlQuery sql = new sqlQuery();
+                    sql.update("ADD_HH", name, value, 7);
+                    MessageBox.Show("THÊM HÀNG HÓA THÀNH CÔNG !", "");
+
+                    LoadListView1();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Mời kiểm tra lại !", "THÔNG BÁO");
+            }
             //}
             //catch (Exception)
             //{
