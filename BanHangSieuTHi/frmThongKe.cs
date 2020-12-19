@@ -48,10 +48,9 @@ namespace BanHangSieuTHi
         private void btnIn_Click(object sender, EventArgs e)
         {
             int check = comboBox1.SelectedIndex;
-            if (check == 0)
-            {
-                frmBaoCaoThongKe frm = new frmBaoCaoThongKe();
-                frm.Show();
+            if (check == 0) { 
+            frmBaoCaoThongKe frm = new frmBaoCaoThongKe();
+            frm.Show();
             }
         }
 
@@ -75,18 +74,18 @@ namespace BanHangSieuTHi
             listViewNhap.Items.Clear();
             listViewXuat.Items.Clear();
             sqlQuery truyVanDL = new sqlQuery();
-            string addLoai, addNCC, MaLoai, MaNCC;
+                string addLoai, addNCC, MaLoai,MaNCC;
             if (cbLoaiHang.SelectedIndex == -1)
             {
                 addLoai = "";
             }
             else
-            {
+            {                
                 DataTable dt2 = truyVanDL.LayDuLieu("select MaLoai from LOAIHANG where DienGiai=N'" + cbLoaiHang.SelectedItem.ToString() + "'");
                 MaLoai = dt2.Rows[0][0].ToString();
                 addLoai = " and c.MaLoai = '" + MaLoai + "'";
             }
-            if (cbNhaCC.SelectedIndex == -1)
+            if (cbNhaCC.SelectedIndex==-1)
             {
                 addNCC = "";
             }
@@ -96,22 +95,22 @@ namespace BanHangSieuTHi
                 MaNCC = dt1.Rows[0][0].ToString();
                 addNCC = " and hd.MaNCC='" + MaNCC + "'";
             }
-            dateTimePicker1.ShowUpDown = true;
-            dateTimePicker2.ShowUpDown = true;
+                dateTimePicker1.ShowUpDown = true;
+                dateTimePicker2.ShowUpDown = true;
+           
 
-
-
-            DataTable dt = truyVanDL.LayDuLieu("Select h.Mahang,h.TenHang,c.SoLuongNhap,c.DonGiaN from CHITIETNHAP as c , HANGHOA as h,HOADONNHAP as hd where c.SoHDN= hd.SoHDN and h.MaHang=c.MaHang and hd.NgayNhap between cast('" + dateTimePicker1.Value.ToString("yyyy/MM/dd") + "' as date) and cast('" + dateTimePicker2.Value.ToString("yyyy/MM/dd") + "' as date)" + addLoai + addNCC + "");
+            
+            DataTable dt = truyVanDL.LayDuLieu("Select h.Mahang,h.TenHang,c.SoLuongNhap,c.DonGiaN from CHITIETNHAP as c , HANGHOA as h,HOADONNHAP as hd where c.SoHDN= hd.SoHDN and h.MaHang=c.MaHang and hd.NgayNhap between cast('"+ dateTimePicker1.Value.ToString("yyyy/MM/dd")+"' as date) and cast('" + dateTimePicker2.Value.ToString("yyyy/MM/dd")+"' as date)"+addLoai+addNCC+"");
             int soSPNhap = dt.Rows.Count, SLNhap = 0, thanhtien = 0;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
-                ListViewItem item = new ListViewItem((i + 1).ToString());
+                ListViewItem item = new ListViewItem((i+1).ToString());
                 item.SubItems.Add(dt.Rows[i][0].ToString());
                 item.SubItems.Add(dt.Rows[i][1].ToString());
                 item.SubItems.Add(dt.Rows[i][2].ToString());
-                int tien = Int16.Parse(dt.Rows[i][3].ToString()) * Int16.Parse(dt.Rows[i][3].ToString());
-                item.SubItems.Add(tien.ToString());
-                listViewNhap.Items.Add(item);
+                int tien =Int16.Parse(dt.Rows[i][3].ToString()) * Int16.Parse(dt.Rows[i][3].ToString());
+                item.SubItems.Add(tien.ToString());          
+                listViewNhap.Items.Add(item);              
                 SLNhap = SLNhap + Int16.Parse(dt.Rows[i][2].ToString());
                 thanhtien = thanhtien + tien;
             }
